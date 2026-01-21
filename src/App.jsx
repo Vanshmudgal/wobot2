@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import Hello from "./components/Hello";
+import Hello from "./components/Camera";
+import Cameras from "./components/Camera";
 
 function App() {
-  const [cameras, setCameras] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   return (
     <>
      
-      <Hello/>
+      <Cameras/>
     </>
   );
 }
