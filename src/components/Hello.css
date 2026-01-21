@@ -196,13 +196,22 @@
 }
 
 /* Column Headers */
+/* Column Headers */
+
+/* Column Headers */
+/* Column Headers */
+/* Column Headers */
+/* Column Headers */
 .camera-table th {
-  padding: 1rem;
-  font-size: 12px;
-  font-weight: 700; /* Bold headers */
-  color: var(--text-light);
+  padding: 1.25rem 1rem;
+  font-size: 13px;
+  font-weight: 550;
+  
+  color: var(--text-muted); 
+  
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #E5E7EB;
 }
 
 /* Rows & Cells */
