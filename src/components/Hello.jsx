@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import brand from "./brand.svg";
+import './Hello.css';
 
 function Hello() {
   const [data, setData] = useState([]);
@@ -15,8 +16,6 @@ function Hello() {
   const [statusFilter, setStatusFilter] = useState("All"); 
   const [locationFilter, setLocationFilter] = useState("All"); 
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // itemsPerPage state sirf 10 aur 20 handle karega
   const [itemsPerPage, setItemsPerPage] = useState(10); 
 
   const TOKEN = import.meta.env.VITE_APITOKEN;
@@ -87,100 +86,95 @@ function Hello() {
   const currentItems = filteredCameras.slice(indexOfFirstItem, indexOfLastItem);
   const uniqueLocations = [...new Set(data.map(c => c.location))];
 
-  if (loading) return <div className="flex justify-center items-center h-screen font-sans text-gray-400 bg-[#F9FAFB]">Loading...</div>;
+  if (loading) return <div className="loading-screen">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] font-sans text-[#374151]">
-      <div className="flex justify-center py-6">
-        <img src={brand} alt="Wobot.ai" className="h-8" />
+    <div className="container">
+      <div className="brand-wrapper">
+        <img src={brand} alt="Wobot.ai" className="brand-logo" />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-10 pb-10">
-        <div className="flex justify-between items-start mb-8">
-          <div className="text-left flex flex-col">
-            <h1 className="text-[28px] font-semibold text-[#111827] leading-none m-0 p-0">Cameras</h1>
-            <p className="text-[14px] text-[#6B7280] mt-2 p-0">Manage your cameras here.</p>
+      <div className="main-content">
+        <div className="header-row">
+          <div className="header-text">
+            <h1>Cameras</h1>
+            <p>Manage your cameras here.</p>
           </div>
 
-          <div className="relative">
+          <div className="search-wrapper">
             <input 
               type="text" 
               placeholder="search" 
-              className="w-72 pl-4 pr-10 py-2.5 bg-[#F3F4F6] border border-gray-200 rounded-md text-[14px] outline-none transition-all focus:ring-1 focus:ring-blue-300"
+              className="search-input"
               onChange={(e) => handleFilterChange('search', e.target.value)}
             />
-            <Search className="w-4 h-4 text-gray-400 absolute right-3 top-3.5" />
+            <Search className="search-icon" />
           </div>
         </div>
 
-        <div className="flex gap-4 mb-6">
-          <div className="relative">
-            <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-3.5 pointer-events-none" />
-            <select 
-              className="appearance-none pl-9 pr-10 py-2.5 bg-white border border-gray-200 rounded-md text-[14px] text-gray-500 outline-none cursor-pointer shadow-sm"
-              onChange={(e) => handleFilterChange('location', e.target.value)}
-            >
+        <div className="filters-row">
+          <div className="select-wrapper">
+            <MapPin className="select-icon-left" />
+            <select className="custom-select" onChange={(e) => handleFilterChange('location', e.target.value)}>
               <option value="All">Location</option>
               {uniqueLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
             </select>
-            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-3.5 pointer-events-none" />
+            <ChevronDown className="select-icon-right" />
           </div>
 
-          <div className="relative">
-            <Wifi className="w-4 h-4 text-gray-400 absolute left-3 top-3.5 pointer-events-none rotate-45" />
-            <select 
-              className="appearance-none pl-9 pr-10 py-2.5 bg-white border border-gray-200 rounded-md text-[14px] text-gray-500 outline-none cursor-pointer shadow-sm"
-              onChange={(e) => handleFilterChange('status', e.target.value)}
-            >
+          <div className="select-wrapper">
+            <Wifi className="select-icon-left" style={{transform: 'rotate(45deg) translateY(-50%)', top: '50%'}} />
+            <select className="custom-select" onChange={(e) => handleFilterChange('status', e.target.value)}>
               <option value="All">Status</option>
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
             </select>
-            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-3 top-3.5 pointer-events-none" />
+            <ChevronDown className="select-icon-right" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-          <table className="w-full text-left border-collapse">
-            <thead className="bg-white">
-              <tr className="border-b border-gray-100">
-                <th className="py-4 px-6 w-12 text-center"><input type="checkbox" className="w-4 h-4 rounded border-gray-300" /></th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider">Name</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider">Model</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider">Location</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider">Recorder</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider">Tasks</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider text-center">Status</th>
-                <th className="py-4 px-4 text-[12px] font-bold text-[#9CA3AF] uppercase tracking-wider text-right pr-10">Actions</th>
+        <div className="table-card">
+          <table className="camera-table">
+            <thead>
+              <tr>
+                <th className="checkbox-cell"><input type="checkbox" /></th>
+                <th>Name</th>
+                <th>Model</th>
+                <th>Location</th>
+                <th>Recorder</th>
+                <th>Tasks</th>
+                <th className="status-cell">Status</th>
+                <th className="actions-cell">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody>
               {currentItems.map((cam) => (
-                <tr key={cam.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="py-5 px-6 text-center"><input type="checkbox" className="w-4 h-4 rounded border-gray-300" /></td>
-                  <td className="py-5 px-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2.5 h-2.5 rounded-full ${cam.status === 'Active' ? 'bg-[#10B981]' : 'bg-[#EF4444]'}`}></div>
+                <tr key={cam.id} className="table-row">
+                  <td className="checkbox-cell"><input type="checkbox" /></td>
+                  <td>
+                    <div className="name-cell">
+                      <div className={`status-dot ${cam.status === 'Active' ? 'active-dot' : 'inactive-dot'}`}></div>
                       <div>
-                        <span className="text-[14px] font-medium text-[#111827]">{cam.name}</span>
-                        <div className="text-[12px] text-gray-400">admin@wobot.ai</div>
+                        <div className="camera-name">{cam.name}</div>
+                        <div className="camera-email">admin@wobot.ai</div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-5 px-4 text-[14px] text-gray-500">{cam.model}</td>
-                  <td className="py-5 px-4 text-[14px] text-gray-600">{cam.location}</td>
-                  <td className="py-5 px-4 text-[14px] text-gray-600">{cam.ip_address}</td>
-                  <td className="py-5 px-4 text-[14px] text-gray-600">{cam.resolution}</td>
-                  <td className="py-5 px-4 text-center">
-                    <span className={`inline-block px-3 py-1 rounded-md text-[12px] font-semibold ${
-                      cam.status === 'Active' ? 'bg-[#ECFDF5] text-[#059669]' : 'bg-[#F3F4F6] text-[#6B7280]'
-                    }`}>
+                  <td className="info-text">{cam.model}</td>
+                  <td className="info-text">{cam.location}</td>
+                  <td className="info-text">{cam.ip_address}</td>
+                  <td className="info-text">{cam.resolution}</td>
+                  <td className="status-cell">
+                    <span className={`status-pill ${cam.status === 'Active' ? 'status-active' : 'status-inactive'}`}>
                       {cam.status}
                     </span>
                   </td>
-                  <td className="py-5 px-4 text-right pr-10">
-                    <button onClick={() => toggleStatus(cam.id, cam.status)} className="text-gray-400 hover:text-gray-700">
-                      {cam.status === 'Active' ? <CircleOff className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5 text-green-500" />}
+                  <td className="actions-cell">
+                    <button onClick={() => toggleStatus(cam.id, cam.status)} className="action-btn">
+                      {cam.status === 'Active' ? 
+                        <CircleOff className="icon-btn action-icon-inactive" /> : 
+                        <CheckCircle2 className="icon-btn action-icon-active" />
+                      }
                     </button>
                   </td>
                 </tr>
@@ -188,29 +182,26 @@ function Hello() {
             </tbody>
           </table>
 
-          {/* Pagination Footer - UPDATED OPTIONS */}
-          <div className="flex justify-end items-center py-4 px-10 border-t border-gray-100 gap-8 text-[14px] text-gray-500 bg-white">
-            <div className="flex items-center gap-2 relative">
-              <select 
-                value={itemsPerPage}
-                onChange={handleItemsPerPageChange}
-                className="appearance-none bg-transparent border-none outline-none cursor-pointer text-gray-600 font-medium pr-4"
-              >
+          <div className="pagination-footer">
+            {/* FIXED: New wrapper class for correct alignment */}
+            <div className="pagination-dropdown-wrapper">
+              <select value={itemsPerPage} onChange={handleItemsPerPageChange} className="pagination-select">
                 <option value={10}>10</option>
                 <option value={20}>20</option>
               </select>
-              <ChevronDown className="w-4 h-4 text-gray-400 absolute right-0 pointer-events-none" />
+              {/* FIXED: New class for centered icon */}
+              <ChevronDown className="pagination-select-icon" />
             </div>
 
-            <span className="font-medium">
+            <span className="pagination-info">
               {totalItems > 0 ? `${indexOfFirstItem + 1}-${Math.min(indexOfLastItem, totalItems)}` : '0-0'} of {totalItems}
             </span>
 
-            <div className="flex gap-4 items-center">
-              <ChevronsLeft onClick={() => setCurrentPage(1)} className={`w-5 h-5 ${currentPage === 1 ? 'opacity-20 cursor-default' : 'opacity-100 cursor-pointer hover:text-gray-800'}`} />
-              <ChevronLeft onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} className={`w-5 h-5 ${currentPage === 1 ? 'opacity-20 cursor-default' : 'opacity-100 cursor-pointer hover:text-gray-800'}`} />
-              <ChevronRight onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} className={`w-5 h-5 ${currentPage === totalPages || totalPages === 0 ? 'opacity-20 cursor-default' : 'opacity-100 cursor-pointer hover:text-gray-800'}`} />
-              <ChevronsRight onClick={() => setCurrentPage(totalPages)} className={`w-5 h-5 ${currentPage === totalPages || totalPages === 0 ? 'opacity-20 cursor-default' : 'opacity-100 cursor-pointer hover:text-gray-800'}`} />
+            <div className="pagination-controls">
+              <ChevronsLeft onClick={() => setCurrentPage(1)} className={`icon-btn ${currentPage === 1 ? 'icon-disabled' : ''}`} />
+              <ChevronLeft onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} className={`icon-btn ${currentPage === 1 ? 'icon-disabled' : ''}`} />
+              <ChevronRight onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} className={`icon-btn ${currentPage === totalPages || totalPages === 0 ? 'icon-disabled' : ''}`} />
+              <ChevronsRight onClick={() => setCurrentPage(totalPages)} className={`icon-btn ${currentPage === totalPages || totalPages === 0 ? 'icon-disabled' : ''}`} />
             </div>
           </div>
         </div>
