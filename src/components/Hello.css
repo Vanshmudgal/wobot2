@@ -1,137 +1,154 @@
-/* Color Palette */
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================= */
 :root {
-  --bg-gray-light: #F9FAFB;
-  --bg-gray-dark: #F3F4F6;
-  --text-main: #374151;
-  --text-dark: #111827;
-  --text-muted: #6B7280;
-  --text-light: #9CA3AF;
-  --border-color: #E5E7EB;
-  --accent-green: #10B981;
-  --accent-red: #EF4444;
-  --bg-green-soft: #ECFDF5;
-  --text-green-dark: #059669;
+  /* -- Backgrounds -- */
+  --bg-gray-light: #F9FAFB;   /* Main app background */
+  --bg-gray-dark: #F3F4F6;    /* Secondary backgrounds (headers, inactive items) */
+  --bg-green-soft: #ECFDF5;   /* Active status pill background */
+
+  /* -- Typography Colors -- */
+  --text-main: #374151;       /* Primary body text */
+  --text-dark: #111827;       /* Headings and strong emphasis */
+  --text-muted: #6B7280;      /* Secondary text, labels, icons */
+  --text-light: #9CA3AF;      /* Placeholders and disabled states */
+  --text-green-dark: #059669; /* Active status text */
+
+  /* -- Borders & Accents -- */
+  --border-color: #E5E7EB;    /* Light dividers */
+  --accent-green: #10B981;    /* Success indicators (dots) */
+  --accent-red: #EF4444;      /* Error/Inactive indicators */
 }
 
+/* =========================================
+   2. MAIN LAYOUT STRUCTURE
+   ========================================= */
+
+/* Main application wrapper - ensures full viewport height */
 .container {
   min-height: 100vh;
   background-color: var(--bg-gray-light);
-  font-family: sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text-main);
 }
 
+/* Centered Brand Logo at the top */
 .brand-wrapper {
   display: flex;
   justify-content: center;
-  padding: 1.5rem 0;
+  padding: 1.5rem 0; /* Vertical breathing room */
 }
 
 .brand-logo {
-  height: 2rem;
+  height: 2rem; /* Fixed height for consistency */
 }
 
+/* Content Container - constrains width on large screens */
 .main-content {
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2.5rem 2.5rem;
+  margin: 0 auto; /* Centers the container */
+  padding: 0 2.5rem 2.5rem; /* Right/Left/Bottom padding */
 }
 
-/* Header Section */
+/* =========================================
+   3. HEADER & SEARCH SECTION
+   ========================================= */
+
+/* Flex container for Title (Left) and Search (Right) */
 .header-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2rem;
+  align-items: flex-start; /* Aligns top of title with search bar */
+  margin-bottom: 24px;
 }
 
 .header-text {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* FIXED: Ensures strict left alignment */
+  text-align: left;
 }
 
-.header-text h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--text-dark);
+/* --- Typography: "Cameras" Heading --- */
+/* Refined to match high-fidelity UI screenshot */
+.header-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 24px;
+  font-weight: 548;        /* Custom weight for specific visual boldness */
+  letter-spacing: -0.01em; /* Slight tightening for a professional look */
+  color: #1F2937;          /* Dark charcoal */
   margin: 0;
-  line-height: 1;
+  padding: 0;
+  line-height: 1.3;
 }
 
-.header-text p {
+.header-subtitle {
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
-  color: var(--text-muted);
-  margin: 0.5rem 0 0;
-  line-height: 1.25;
+  color: #6B7280;
+  margin-top: 4px;
+  font-weight: 400;
 }
 
-/* Search Box */
+/* --- Search Component --- */
 .search-wrapper {
-  position: relative;
+  position: relative; /* Anchor for absolute positioning of the icon */
+  margin-top: 4px;    /* Visual alignment correction with title */
 }
+
 
 .search-input {
-  width: 18rem;
-  padding: 0.625rem 2.5rem 0.625rem 1rem;
-  background-color: var(--bg-gray-dark);
-  border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
+  width: 240px;
+  padding: 8px 12px 8px 36px;
+  
+  /* CHANGE THIS LINE */
+  background-color: #F3F4F6; /* Was #F9FAFB. This matches the darker gray in your image */
+  
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
   font-size: 14px;
+  color: #6B7280;
   outline: none;
   transition: all 0.2s;
 }
-
+/* Focus state for better accessibility */
 .search-input:focus {
   box-shadow: 0 0 0 1px #93C5FD;
   border-color: #93C5FD;
 }
 
+.search-input::placeholder {
+  color: #9CA3AF;
+}
+
+/* Icon positioned inside the input field */
 .search-icon {
   position: absolute;
-  right: 0.75rem;
+  right: 0.75rem; /* Positioned to the right as per UI design */
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* Perfect vertical centering */
   width: 1rem;
   height: 1rem;
   color: var(--text-light);
+  pointer-events: none; /* Clicks pass through to the input */
 }
 
-/* Filters */
+/* =========================================
+   4. FILTERS & CONTROLS
+   ========================================= */
 .filters-row {
   display: flex;
-  gap: 1rem;
+  gap: 1rem; /* Space between filter dropdowns */
   margin-bottom: 1.5rem;
 }
 
 .select-wrapper {
-  position: relative;
+  position: relative; /* Anchor for custom arrow icons */
 }
 
-.select-icon-left {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  color: var(--text-light);
-  pointer-events: none;
-}
-
-.select-icon-right {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  color: var(--text-light);
-  pointer-events: none;
-}
-
+/* Custom dropdown styling */
 .custom-select {
-  appearance: none;
-  padding: 0.625rem 2.5rem 0.625rem 2.25rem;
+  appearance: none; /* Hides default browser arrow */
+  padding: 0.625rem 2.5rem 0.625rem 2.25rem; /* Padding for left/right icons */
   background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 0.375rem;
@@ -142,34 +159,53 @@
   outline: none;
 }
 
-/* Table Styling */
+/* Icons inside select boxes */
+.select-icon-left,
+.select-icon-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.select-icon-left { left: 0.75rem; }
+.select-icon-right { right: 0.75rem; }
+
+/* =========================================
+   5. DATA TABLE
+   ========================================= */
 .table-card {
   background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow: hidden; /* Contains child border-radius */
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .camera-table {
   width: 100%;
   text-align: left;
-  border-collapse: collapse;
+  border-collapse: collapse; /* Removes gaps between cells */
 }
 
 .camera-table thead {
   border-bottom: 1px solid #F3F4F6;
 }
 
+/* Column Headers */
 .camera-table th {
   padding: 1rem;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 700; /* Bold headers */
   color: var(--text-light);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
+/* Rows & Cells */
 .camera-table td {
   padding: 1.25rem 1rem;
   border-bottom: 1px solid #F9FAFB;
@@ -177,27 +213,29 @@
 }
 
 .table-row:hover {
-  background-color: #F9FAFB;
+  background-color: #F9FAFB; /* Hover effect for better readability */
 }
 
+/* Checkbox Column */
 .checkbox-cell {
   width: 3rem;
   text-align: center;
 }
 
+/* Name Column (Image + Text) */
 .name-cell {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
+/* Status Dot (Green/Red Circle) */
 .status-dot {
   width: 0.625rem;
   height: 0.625rem;
-  border-radius: 9999px;
+  border-radius: 9999px; /* Fully rounded */
   flex-shrink: 0;
 }
-
 .active-dot { background-color: var(--accent-green); }
 .inactive-dot { background-color: var(--accent-red); }
 
@@ -212,14 +250,8 @@
   color: var(--text-light);
 }
 
-.info-text {
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
-.status-cell {
-  text-align: center;
-}
+/* Status Pills (Active/Inactive Labels) */
+.status-cell { text-align: center; }
 
 .status-pill {
   display: inline-block;
@@ -228,10 +260,10 @@
   font-size: 12px;
   font-weight: 600;
 }
-
 .status-active { background-color: var(--bg-green-soft); color: var(--text-green-dark); }
 .status-inactive { background-color: var(--bg-gray-dark); color: var(--text-muted); }
 
+/* Actions Column (Edit/Delete Buttons) */
 .actions-cell {
   text-align: right;
   padding-right: 2.5rem;
@@ -245,25 +277,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.2s;
 }
 
+.action-btn:hover { color: var(--text-dark); }
 .action-icon-active { color: var(--accent-green); }
 .action-icon-inactive { color: var(--text-light); }
 
-/* Pagination */
+/* =========================================
+   6. PAGINATION
+   ========================================= */
 .pagination-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Right align controls */
   align-items: center;
-  padding: 1rem 2.5rem;
-  border-top: 1px solid #F3F4F6;
-  gap: 2rem;
+  padding: 16px 24px;
+  gap: 32px;
+  background-color: #fff;
+  border-top: 1px solid #f3f4f6;
+  color: #6b7280;
   font-size: 14px;
-  color: var(--text-muted);
-  background-color: white;
 }
 
-/* FIXED: New wrapper for proper alignment */
+/* Rows per page dropdown */
 .pagination-dropdown-wrapper {
   position: relative;
   display: flex;
@@ -274,57 +311,56 @@
   appearance: none;
   background: transparent;
   border: none;
-  padding-right: 1.5rem;
+  padding-right: 20px;
   cursor: pointer;
-  font-size: 14px;
-  color: var(--text-muted);
+  color: #374151;
   font-weight: 500;
   outline: none;
 }
 
-/* FIXED: Icon is now centered vertically within the wrapper */
+/* Custom Chevron for Select */
 .pagination-select-icon {
   position: absolute;
   right: 0;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  color: var(--text-light);
   pointer-events: none;
-}
-
-.pagination-info {
-  font-weight: 500;
-  min-width: 60px;
-  text-align: right;
+  color: #9ca3af;
 }
 
 .pagination-controls {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
   align-items: center;
 }
 
 .icon-btn {
   width: 1.25rem;
   height: 1.25rem;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
   transition: color 0.2s;
 }
 
-.icon-btn:hover {
-  color: var(--text-dark);
+.icon-btn:hover:not(:disabled) {
+  color: #111827;
 }
 
-.icon-disabled { 
-  opacity: 0.3; 
-  cursor: default; 
+.icon-disabled {
+  color: #e5e7eb;
+  cursor: not-allowed;
   pointer-events: none;
 }
 
-/* Loading State */
+/* =========================================
+   7. UTILITIES & RESPONSIVE DESIGN
+   ========================================= */
 .loading-screen {
   display: flex;
   justify-content: center;
@@ -336,51 +372,52 @@
   font-size: 1.125rem;
 }
 
-
-/* --- Add these Media Queries to the bottom of Hello.css --- */
-
+/* --- Tablet / Laptop (Max 1024px) --- */
 @media (max-width: 1024px) {
   .main-content {
-    padding: 0 1.5rem 1.5rem; /* Reduce side padding on tablets */
+    padding: 0 1.5rem 1.5rem;
   }
   
   .search-input {
-    width: 100%; /* Search bar takes full width on smaller screens */
+    width: 100%; /* Expand search to full width */
   }
 }
 
+/* --- Mobile (Max 768px) --- */
 @media (max-width: 768px) {
+  /* Stack Header Elements */
   .header-row {
-    flex-direction: column; /* Stack Title and Search vertically */
+    flex-direction: column;
     gap: 1.5rem;
   }
 
+  /* Stack Filters */
   .filters-row {
-    flex-direction: column; /* Stack Location and Status filters */
+    flex-direction: column;
     width: 100%;
   }
 
   .select-wrapper, .custom-select {
-    width: 100%; /* Filters take full width */
+    width: 100%;
   }
 
-  /* Table responsiveness: Standard practice for "Pure CSS" */
+  /* Enable Horizontal Scroll for Table */
   .table-card {
     border: none;
     box-shadow: none;
-    overflow-x: auto; /* Enable horizontal scrolling for the table */
+    overflow-x: auto;
     display: block;
   }
 
   .camera-table {
     display: block;
     width: 100%;
-    min-width: 600px; /* Ensures the table doesn't get too squashed */
+    min-width: 600px; /* Prevent column squashing */
   }
 
+  /* Stack Pagination */
   .pagination-footer {
-    flex-direction: column; /* Stack pagination elements */
-    align-items: center;
+    flex-direction: column;
     gap: 1rem;
     padding: 1.5rem;
   }

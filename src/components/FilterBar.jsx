@@ -21,7 +21,7 @@ const FilterBar = ({ locations, onLocationChange, onStatusChange }) => {
           onChange={(e) => onLocationChange(e.target.value)}
           aria-label="Filter by location"
         >
-          <option value="All">All Locations</option>
+          <option value="All">Location</option>
           {locations.map((loc) => (
             <option key={loc} value={loc}>
               {loc}
@@ -44,7 +44,7 @@ const FilterBar = ({ locations, onLocationChange, onStatusChange }) => {
           onChange={(e) => onStatusChange(e.target.value)}
           aria-label="Filter by connection status"
         >
-          <option value="All">All Statuses</option>
+          <option value="All">Status</option>
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
