@@ -5,41 +5,38 @@ import Header from './Header';
 import FilterBar from './FilterBar';
 import CameraTable from './CameraTable';
 import Pagination from './Pagination';
+// Import the new Modal
+import DeleteModal from './DeleteModal';
 
-// Assets and Styling
 import brand from "./brand.svg";
 import './Hello.css';
 
-/**
- * Camera Component (Main Dashboard)
- */
 function Camera() {
-  // --- State Hooks ---
-  const [data, setData] = useState([]);               
-  const [loading, setLoading] = useState(true);        
-  const [searchTerm, setSearchTerm] = useState("");    
-  const [statusFilter, setStatusFilter] = useState("All"); 
-  const [locationFilter, setLocationFilter] = useState("All"); 
-  const [currentPage, setCurrentPage] = useState(1);   
-  const [itemsPerPage, setItemsPerPage] = useState(10); 
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [locationFilter, setLocationFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  // Environment variables
+  // --- NEW: Modal State ---
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [cameraToDelete, setCameraToDelete] = useState(null);
+
   const TOKEN = import.meta.env.VITE_APITOKEN;
   const BASE_URL = import.meta.env.VITE_URL;
 
-  // --- API: Fetch Data ---
   const fetchCameras = async () => {
     try {
       setLoading(true);
       const res = await axios.get(`${BASE_URL}/fetch/cameras`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
       });
-      
       const mappedData = (res.data.data?.cameras || []).map(cam => ({
         ...cam,
         status: cam.status?.toLowerCase() === 'active' ? 'Active' : 'Inactive'
       }));
-      
       setData(mappedData);
     } catch (err) {
       console.error("Fetch Error:", err);
@@ -48,7 +45,6 @@ function Camera() {
     }
   };
 
-  // --- Action: Toggle Status ---
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     try {
@@ -56,49 +52,47 @@ function Camera() {
         { id, status: newStatus },
         { headers: { Authorization: `Bearer ${TOKEN}` } }
       );
-      
       setData(prev => prev.map(cam => cam.id === id ? { ...cam, status: newStatus } : cam));
     } catch (err) {
       console.error("Update failed:", err);
-      alert("Status update failed.");
     }
   };
 
-  // --- NEW Action: Delete Camera ---
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this camera?");
-    if (!confirmDelete) return;
+  // --- STEP 1: Triggered when Trash icon is clicked ---
+  const handleOpenDeleteModal = (id) => {
+    setCameraToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  // --- STEP 2: Triggered when user clicks "Delete" in Modal ---
+  const confirmDelete = async () => {
+    if (!cameraToDelete) return;
 
     try {
-      // API call (Uncomment if backend supports delete)
-      /* await axios.delete(`${BASE_URL}/delete/camera`, { 
-        data: { id },
-        headers: { Authorization: `Bearer ${TOKEN}` } 
-      }); 
-      */
-
-      // Optimistic UI Update: Remove item from list immediately
-      setData(prevData => prevData.filter(cam => cam.id !== id));
+      // API call goes here
+      // await axios.delete...
       
+      // Optimistic Update
+      setData(prevData => prevData.filter(cam => cam.id !== cameraToDelete));
+      
+      // Close Modal
+      setDeleteModalOpen(false);
+      setCameraToDelete(null);
     } catch (err) {
       console.error("Delete failed:", err);
-      alert("Could not delete camera.");
     }
   };
 
-  // Initial Load
   useEffect(() => { 
     fetchCameras(); 
   }, []);
 
-  // --- Filtering Logic ---
   const filteredData = data.filter(cam => 
     cam.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (statusFilter === "All" || cam.status === statusFilter) &&
     (locationFilter === "All" || cam.location === locationFilter)
   );
 
-  // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const currentItems = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -106,6 +100,13 @@ function Camera() {
 
   return (
     <div className="container">
+      {/* --- NEW: Render Modal Here --- */}
+      <DeleteModal 
+        isOpen={isDeleteModalOpen} 
+        onClose={() => setDeleteModalOpen(false)} 
+        onConfirm={confirmDelete}
+      />
+
       <div className="brand-wrapper">
         <img src={brand} alt="Wobot.ai Dashboard" className="brand-logo" />
       </div>
@@ -120,11 +121,11 @@ function Camera() {
         />
 
         <div className="table-card">
-          {/* Passed onDelete prop here */}
           <CameraTable 
             cameras={currentItems} 
             onToggleStatus={toggleStatus} 
-            onDelete={handleDelete} 
+            // Pass the modal opener instead of direct delete
+            onDelete={handleOpenDeleteModal} 
           />
           
           <Pagination 
