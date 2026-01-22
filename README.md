@@ -34,8 +34,8 @@ Follow these steps to initialize the project locally:
 
 1. Clone the Repository:
 
-  git clone [Your-Repo-URL]
-  cd [Your-Project-Folder]
+    git clone [Your-Repo-URL]
+   cd [Your-Project-Folder]
 
 2. Install Dependencies:
 
