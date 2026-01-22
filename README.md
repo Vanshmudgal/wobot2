@@ -34,23 +34,21 @@ Follow these steps to initialize the project locally:
 
 1. Clone the Repository:
 
-Bash
-
-git clone [Your-Repo-URL]
-cd [Your-Project-Folder]
+  git clone [Your-Repo-URL]
+  cd [Your-Project-Folder]
 
 2. Install Dependencies:
 
-npm install
+   npm install
 
 3. Configure Environment Variables: Create a .env file in the root directory and append the following credentials:
 
-VITE_APITOKEN = [Your_Unique_API_Token]
-VITE_URL = [Your API URL]
+   VITE_APITOKEN = [Your_Unique_API_Token]
+   VITE_URL = [Your API URL]
 
 4. Execute Development Environment:
 
-npm run dev
+   npm run dev
 
 🧠 Architectural Decisions
 Vanilla CSS vs. Tailwind/Bootstrap: To comply with the "No UI Library" constraint, all styling was custom-authored to demonstrate proficiency in CSS architecture and the Box Model.
